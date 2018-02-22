@@ -100,5 +100,7 @@ ENV/
 .idea/
 
 bin/
-src/*.egg-info
 .mr.developer.cfg
+
+src/*
+!src/su

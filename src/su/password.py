@@ -6,9 +6,10 @@ import os
 import random
 import string
 
-from suaes import encrypt, decrypt
+from su.aes import encrypt, decrypt
 
 __all__ = ['SuPass']
+
 
 class SuPass:
     # write credentials to ~/.supass/accounts.cfg
@@ -51,7 +52,7 @@ class SuPass:
             self.config_parser.read(self.account_file_path)
         except BaseException as e:
             warning("Cannot load modules for using local profile: %s" % e)
- 
+
         if not is_new_account:
             try:
                 for entry in self.config:
@@ -68,13 +69,13 @@ class SuPass:
                 self.init()
         else:
             self.init()
-    
+
     def get(self, key):
         for entry in self.config:
             if entry['key'] == key:
                 return entry['value']
         return False
-    
+
     def init(self):
         for entry in self.config:
             if entry['type'] == 'password':
@@ -101,6 +102,7 @@ class SuPass:
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
+
     parser = ArgumentParser('A simple id/pw management lib.\n')
     parser.add_argument('-i', '--account_id', dest='account_id', default='default')
     parser.add_argument('-f', '--account_file_path', dest='account_file_path', default=None)
@@ -120,6 +122,7 @@ if __name__ == '__main__':
             'prompt': 'TEST PW: '
         }
     )
-    account = SuPass(TEST_CONFIG, options.account_id, options.account_file_path, options.encrypt_key, options.is_new_account)
+    account = SuPass(TEST_CONFIG, options.account_id, options.account_file_path, options.encrypt_key,
+                     options.is_new_account)
     print(account.get('testId'))
     print(account.get('testPw'))
