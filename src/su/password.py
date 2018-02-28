@@ -14,18 +14,12 @@ __all__ = ['SuPass']
 class SuPass:
     # write credentials to ~/.supass/accounts.cfg
     # and generate random encrypt key into ~/.supass/.encrypt_key if not specified
-    def __init__(self, config, account_id="default", account_file_path=None, encrypt_key=None, is_new_account=False):
-        home_dir = os.path.expanduser('~')
-        credential_dir = os.path.join(home_dir, '.supass')
-
-        if not os.path.exists(credential_dir) and (not account_file_path or not encrypt_key):
+    def __init__(self, config, account_id="default", credential_dir=None, encrypt_key=None, is_new_account=False):
+        credential_dir = os.path.join(os.path.expanduser('~'), '.supass') if credential_dir is None else credential_dir
+        if not os.path.exists(credential_dir):
             os.makedirs(credential_dir, 0o700)
 
-        if not account_file_path:
-            self.account_file_path = os.path.join(credential_dir, 'accounts.cfg')
-        else:
-            self.account_file_path = account_file_path
-
+        self.account_file_path = os.path.join(credential_dir, 'accounts.cfg')
         if not os.path.isfile(self.account_file_path):
             open(self.account_file_path, 'w').close()
             os.chmod(self.account_file_path, 0o600)
@@ -76,6 +70,9 @@ class SuPass:
                 return entry['value']
         return False
 
+    def __getattr__(self, key):
+        return self.get(key)
+
     def init(self):
         for entry in self.config:
             if entry['type'] == 'password':
@@ -124,5 +121,5 @@ if __name__ == '__main__':
     )
     account = SuPass(TEST_CONFIG, options.account_id, options.account_file_path, options.encrypt_key,
                      options.is_new_account)
-    print(account.get('testId'))
-    print(account.get('testPw'))
+    print(account.testId)
+    print(account.testPw)

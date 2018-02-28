@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-VERSION = "0.1"
+VERSION = "0.1.2"
 NAME = "password"
 DESCRIPTION = "A simple password management lib."
 INSTALL_REQUIRES = [
